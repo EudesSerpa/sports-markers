@@ -16,7 +16,12 @@ const users = [
 ];
 
 router.get("/", (_, res: Response) => {
-  res.json(users);
+  const successFetched: Success = {
+    success: true,
+    data: users,
+  };
+
+  res.status(200).json(successFetched);
 });
 
 router.get("/:id", (req: Request, res: Response): void => {
@@ -30,12 +35,17 @@ router.get("/:id", (req: Request, res: Response): void => {
       message: "User doesn't exists",
     };
 
-    res.status(400).json(errorNoData);
+    res.status(404).json(errorNoData);
 
     return;
   }
 
-  res.json(user);
+  const successFetched: Success = {
+    success: true,
+    data: user,
+  };
+
+  res.status(200).json(successFetched);
 });
 
 router.post("/", (req: Request, res: Response): void => {
@@ -73,6 +83,70 @@ router.post("/", (req: Request, res: Response): void => {
   };
 
   res.status(201).json(successCreated);
+});
+
+router.patch("/:id", (req: Request, res: Response): void => {
+  const { id } = req.params;
+  const { username } = req.body;
+
+  if (!username) {
+    const errorNoData: Fail = {
+      success: false,
+      message: "Username is missing",
+    };
+
+    res.status(400).json(errorNoData);
+
+    return;
+  }
+
+  const user = users.find((user) => user.id === parseInt(id));
+
+  if (!user) {
+    const errorNoData: Fail = {
+      success: false,
+      message: "User doesn't exists",
+    };
+
+    res.status(404).json(errorNoData);
+
+    return;
+  }
+
+  user.username = username;
+
+  const successUpdated: Success = {
+    success: true,
+    data: user,
+  };
+
+  res.status(200).json(successUpdated);
+});
+
+router.delete("/:id", (req: Request, res: Response): void => {
+  const { id } = req.params;
+
+  const userId = users.findIndex((user) => user.id === parseInt(id));
+
+  if (userId === -1) {
+    const successDeleted: Success = {
+      success: true,
+      data: users,
+    };
+
+    res.status(200).json(successDeleted);
+
+    return;
+  }
+
+  const user = users.splice(userId, 1)[0];
+
+  const successDeleted: Success = {
+    success: true,
+    data: user,
+  };
+
+  res.status(200).json(successDeleted);
 });
 
 export default router;
