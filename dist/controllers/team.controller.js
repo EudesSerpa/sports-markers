@@ -46,13 +46,13 @@ const createTeam = (req, res, next) => {
 exports.createTeam = createTeam;
 const updateTeam = (req, res, next) => {
     const { id } = req.params;
-    const { name, imageURI } = req.body;
+    const data = req.body;
     service
-        .update({ id, name, imageURI: imageURI || null })
-        .then((teampdated) => {
+        .update({ id, data })
+        .then((teamUpdated) => {
         const successUpdated = {
             success: true,
-            data: teampdated,
+            data: teamUpdated,
         };
         res.status(200).json(successUpdated);
     })

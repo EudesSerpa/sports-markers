@@ -1,31 +1,31 @@
 import { Request, Response, NextFunction } from "express";
-import { teamService } from "../services/team.service";
+import { sportService } from "../services/sport.service";
 import { ISuccess } from "../interfaces/Success";
 
-const service = new teamService();
+const service = new sportService();
 
-export const getTeams = (_req: Request, res: Response, next: NextFunction) => {
+export const getSports = (_req: Request, res: Response, next: NextFunction) => {
   service
     .find()
-    .then((teams) => {
+    .then((sports) => {
       const successFetched: ISuccess = {
         success: true,
-        data: teams,
+        data: sports,
       };
       res.status(200).json(successFetched);
     })
     .catch(next);
 };
 
-export const getTeam = (req: Request, res: Response, next: NextFunction) => {
+export const getSport = (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
   service
     .findOne(id)
-    .then((team) => {
+    .then((sport) => {
       const successFetched: ISuccess = {
         success: true,
-        data: team,
+        data: sport,
       };
 
       res.status(200).json(successFetched);
@@ -33,15 +33,19 @@ export const getTeam = (req: Request, res: Response, next: NextFunction) => {
     .catch(next);
 };
 
-export const createTeam = (req: Request, res: Response, next: NextFunction) => {
-  const { name, imageURI } = req.body;
+export const createSport = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { name } = req.body;
 
   service
-    .create({ name, imageURI: imageURI || null })
-    .then((team) => {
+    .create({ name })
+    .then((sport) => {
       const successCreated: ISuccess = {
         success: true,
-        data: team,
+        data: sport,
       };
 
       res.status(201).json(successCreated);
@@ -49,16 +53,20 @@ export const createTeam = (req: Request, res: Response, next: NextFunction) => {
     .catch(next);
 };
 
-export const updateTeam = (req: Request, res: Response, next: NextFunction) => {
+export const updateSport = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { id } = req.params;
   const data = req.body;
 
   service
     .update({ id, data })
-    .then((teamUpdated) => {
+    .then((sportUpdated) => {
       const successUpdated: ISuccess = {
         success: true,
-        data: teamUpdated,
+        data: sportUpdated,
       };
 
       res.status(200).json(successUpdated);
@@ -66,15 +74,19 @@ export const updateTeam = (req: Request, res: Response, next: NextFunction) => {
     .catch(next);
 };
 
-export const deleteTeam = (req: Request, res: Response, next: NextFunction) => {
+export const deleteSport = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { id } = req.params;
 
   service
     .delete(id)
-    .then((teamDeleted) => {
+    .then((sportDeleted) => {
       const successDeleted: ISuccess = {
         success: true,
-        data: teamDeleted,
+        data: sportDeleted,
       };
 
       res.status(200).json(successDeleted);

@@ -13,71 +13,65 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _UsersService_instances, _UsersService_validateId;
+var _sportService_instances, _sportService_validateId;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersService = void 0;
+exports.sportService = void 0;
 const mongoose_1 = require("mongoose");
 const custom_error_model_1 = require("../models/custom-error.model");
-const user_model_1 = require("../database/models/user.model");
-class UsersService {
+const sport_model_1 = require("../database/models/sport.model");
+class sportService {
     constructor() {
-        _UsersService_instances.add(this);
+        _sportService_instances.add(this);
     }
     find() {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield user_model_1.User.find({});
-            return users;
+            return yield sport_model_1.Sport.find({});
         });
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _UsersService_instances, "m", _UsersService_validateId).call(this, id);
-            const user = yield user_model_1.User.findById(id);
-            if (!user) {
-                throw new custom_error_model_1.CustomError("User doesn't exists", 404);
+            __classPrivateFieldGet(this, _sportService_instances, "m", _sportService_validateId).call(this, id);
+            const sport = yield sport_model_1.Sport.findById(id);
+            if (!sport) {
+                throw new custom_error_model_1.CustomError("Sport doesn't exists", 404);
             }
-            return user;
+            return sport;
         });
     }
-    create({ username, password }) {
+    create({ name }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.User.findOne({ username });
-            if (user) {
-                throw new custom_error_model_1.CustomError("User already exists", 409);
+            const sport = yield sport_model_1.Sport.findOne({ name });
+            if (sport) {
+                throw new custom_error_model_1.CustomError("Sport already exists", 409);
             }
-            const newUser = {
-                username,
-                password,
-            };
-            const userCreated = yield user_model_1.User.create(newUser);
-            return userCreated;
+            const newSport = { name };
+            const sportCreated = yield sport_model_1.Sport.create(newSport);
+            return sportCreated;
         });
     }
     update({ id, data }) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _UsersService_instances, "m", _UsersService_validateId).call(this, id);
-            const userUpdated = yield user_model_1.User.findByIdAndUpdate(id, Object.assign({}, data), { returnDocument: "after" });
-            if (!userUpdated) {
-                throw new custom_error_model_1.CustomError("User doesn't exists", 404);
+            __classPrivateFieldGet(this, _sportService_instances, "m", _sportService_validateId).call(this, id);
+            const sportUpdated = yield sport_model_1.Sport.findByIdAndUpdate(id, Object.assign({}, data), { returnDocument: "after" });
+            if (!sportUpdated) {
+                throw new custom_error_model_1.CustomError("Sport doesn't exists", 404);
             }
-            return userUpdated;
+            return sportUpdated;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _UsersService_instances, "m", _UsersService_validateId).call(this, id);
-            const userDeleted = yield user_model_1.User.findByIdAndDelete(id);
-            if (!userDeleted) {
-                return {
-                    info: "There's no any user to delete :)",
-                };
+            __classPrivateFieldGet(this, _sportService_instances, "m", _sportService_validateId).call(this, id);
+            const sportDeleted = yield sport_model_1.Sport.findByIdAndDelete(id);
+            if (!sportDeleted) {
+                return { info: "There's no any sport to delete :)" };
             }
-            return userDeleted;
+            return sportDeleted;
         });
     }
 }
-exports.UsersService = UsersService;
-_UsersService_instances = new WeakSet(), _UsersService_validateId = function _UsersService_validateId(id) {
+exports.sportService = sportService;
+_sportService_instances = new WeakSet(), _sportService_validateId = function _sportService_validateId(id) {
     if (!(0, mongoose_1.isValidObjectId)(id)) {
         throw new custom_error_model_1.CustomError("Id is invalid. You must send a string of 12 Bytes or a string of 24 hex characters", 400);
     }

@@ -15,6 +15,6 @@ export const createTeamSchema: Joi.Schema = Joi.object({
 });
 
 export const updateTeamSchema: Joi.Schema = Joi.object({
-  name: name.required(),
+  name,
   imageURI,
 });

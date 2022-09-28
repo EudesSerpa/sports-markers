@@ -52,10 +52,10 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
 
 export const updateUser = (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
-  const { username } = req.body;
+  const data = req.body;
 
   service
-    .update({ id, username })
+    .update({ id, data })
     .then((userUpdated) => {
       const successUpdated: ISuccess = {
         success: true,

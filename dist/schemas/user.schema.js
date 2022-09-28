@@ -16,5 +16,6 @@ exports.createUserSchema = joi_1.default.object({
     password: password.required(),
 });
 exports.updateUserSchema = joi_1.default.object({
-    username: username.required(),
+    username,
+    password,
 });

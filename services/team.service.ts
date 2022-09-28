@@ -2,12 +2,10 @@ import { isValidObjectId } from "mongoose";
 import { CustomError } from "../models/custom-error.model";
 import { ITeam } from "../database/interfaces/Team";
 import { Team } from "../database/models/team.model";
-import { Url } from "url";
 
 export class teamService {
   constructor() {}
 
-  // TODO: Apply inheritance
   #validateId(id: any) {
     if (!isValidObjectId(id)) {
       throw new CustomError(
@@ -52,20 +50,12 @@ export class teamService {
     return teamCreated;
   }
 
-  async update({
-    id,
-    name,
-    imageURI,
-  }: {
-    id: any;
-    name: string;
-    imageURI: Url | null;
-  }): Promise<ITeam> {
+  async update({ id, data }: { id: any; data: {} }): Promise<ITeam> {
     this.#validateId(id);
 
     const teamUpdated = await Team.findByIdAndUpdate(
       id,
-      { name, imageURI },
+      { ...data },
       { returnDocument: "after" }
     );
 

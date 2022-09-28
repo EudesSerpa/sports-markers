@@ -1,6 +1,7 @@
 import { Express, Router } from "express";
 import userRouter from "./user.router";
 import teamRouter from "./team.router";
+import sportRouter from "./sport.router";
 
 export const router = (app: Express) => {
   const mainRouter: Router = Router();
@@ -9,4 +10,5 @@ export const router = (app: Express) => {
 
   mainRouter.use("/users", userRouter);
   mainRouter.use("/teams", teamRouter);
+  mainRouter.use("/sports", sportRouter);
 };

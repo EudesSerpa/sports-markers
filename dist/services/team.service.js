@@ -53,10 +53,10 @@ class teamService {
             return teamCreated;
         });
     }
-    update({ id, name, imageURI, }) {
+    update({ id, data }) {
         return __awaiter(this, void 0, void 0, function* () {
             __classPrivateFieldGet(this, _teamService_instances, "m", _teamService_validateId).call(this, id);
-            const teamUpdated = yield team_model_1.Team.findByIdAndUpdate(id, { name, imageURI }, { returnDocument: "after" });
+            const teamUpdated = yield team_model_1.Team.findByIdAndUpdate(id, Object.assign({}, data), { returnDocument: "after" });
             if (!teamUpdated) {
                 throw new custom_error_model_1.CustomError("Team doesn't exists", 404);
             }

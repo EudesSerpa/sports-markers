@@ -50,18 +50,12 @@ export class UsersService {
     return userCreated;
   }
 
-  async update({
-    id,
-    username,
-  }: {
-    id: any;
-    username: string;
-  }): Promise<IUser> {
+  async update({ id, data }: { id: any; data: {} }): Promise<IUser> {
     this.#validateId(id);
 
     const userUpdated = await User.findByIdAndUpdate(
       id,
-      { username },
+      { ...data },
       { returnDocument: "after" }
     );
 
