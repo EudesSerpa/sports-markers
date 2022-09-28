@@ -1,7 +1,8 @@
 import { isValidObjectId } from "mongoose";
 import { CustomError } from "../models/custom-error.model";
-import { ITeam } from "../interfaces/Team";
-import { Team } from "../models/team.model";
+import { ITeam } from "../database/interfaces/Team";
+import { Team } from "../database/models/team.model";
+import { Url } from "url";
 
 export class teamService {
   constructor() {}
@@ -49,5 +50,43 @@ export class teamService {
     const teamCreated = await Team.create(newTeam);
 
     return teamCreated;
+  }
+
+  async update({
+    id,
+    name,
+    imageURI,
+  }: {
+    id: any;
+    name: string;
+    imageURI: Url | null;
+  }): Promise<ITeam> {
+    this.#validateId(id);
+
+    const teamUpdated = await Team.findByIdAndUpdate(
+      id,
+      { name, imageURI },
+      { returnDocument: "after" }
+    );
+
+    if (!teamUpdated) {
+      throw new CustomError("Team doesn't exists", 404);
+    }
+
+    return teamUpdated;
+  }
+
+  async delete(id: any): Promise<ITeam | object> {
+    this.#validateId(id);
+
+    const teamDeleted = await Team.findByIdAndDelete(id);
+
+    if (!teamDeleted) {
+      return {
+        info: "There's no any team to delete :)",
+      };
+    }
+
+    return teamDeleted;
   }
 }

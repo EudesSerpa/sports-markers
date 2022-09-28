@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const mongoose_1 = require("mongoose");
 const custom_error_model_1 = require("../models/custom-error.model");
-const user_model_1 = require("../models/user.model");
+const user_model_1 = require("../database/models/user.model");
 class UsersService {
     constructor() {
         _UsersService_instances.add(this);

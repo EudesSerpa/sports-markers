@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const validator_handler_1 = require("../middlewares/validator.handler");
+const team_schema_1 = require("../schemas/team.schema");
 const team_controller_1 = require("../controllers/team.controller");
 const router = (0, express_1.Router)();
 router.get("/", team_controller_1.getTeams);
-router.get("/:id", team_controller_1.getTeam);
-router.post("/", team_controller_1.createTeam);
+router.get("/:id", (0, validator_handler_1.validatorHandler)(team_schema_1.getTeamSchema, "params"), team_controller_1.getTeam);
+router.post("/", (0, validator_handler_1.validatorHandler)(team_schema_1.createTeamSchema, "body"), team_controller_1.createTeam);
+router.patch("/:id", (0, validator_handler_1.validatorHandler)(team_schema_1.getTeamSchema, "params"), (0, validator_handler_1.validatorHandler)(team_schema_1.updateTeamSchema, "body"), team_controller_1.updateTeam);
+router.delete("/:id", (0, validator_handler_1.validatorHandler)(team_schema_1.getTeamSchema, "params"), team_controller_1.deleteTeam);
 exports.default = router;

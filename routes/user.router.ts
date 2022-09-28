@@ -1,9 +1,10 @@
 import { Router } from "express";
+import { validatorHandler } from "../middlewares/validator.handler";
 import {
   createUserSchema,
   updateUserSchema,
   getUserSchema,
-} from "../dto/user.schema";
+} from "../schemas/user.schema";
 import {
   createUser,
   deleteUser,
@@ -11,7 +12,6 @@ import {
   getUsers,
   updateUser,
 } from "../controllers/user.controller";
-import { validatorHandler } from "../middlewares/validator.handler";
 
 const router: Router = Router();
 
@@ -28,6 +28,6 @@ router.patch(
   updateUser
 );
 
-router.delete("/:id", deleteUser);
+router.delete("/:id", validatorHandler(getUserSchema, "params"), deleteUser);
 
 export default router;

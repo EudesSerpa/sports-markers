@@ -48,3 +48,36 @@ export const createTeam = (req: Request, res: Response, next: NextFunction) => {
     })
     .catch(next);
 };
+
+export const updateTeam = (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  const { name, imageURI } = req.body;
+
+  service
+    .update({ id, name, imageURI: imageURI || null })
+    .then((teampdated) => {
+      const successUpdated: ISuccess = {
+        success: true,
+        data: teampdated,
+      };
+
+      res.status(200).json(successUpdated);
+    })
+    .catch(next);
+};
+
+export const deleteTeam = (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  service
+    .delete(id)
+    .then((teamDeleted) => {
+      const successDeleted: ISuccess = {
+        success: true,
+        data: teamDeleted,
+      };
+
+      res.status(200).json(successDeleted);
+    })
+    .catch(next);
+};

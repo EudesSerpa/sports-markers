@@ -3,9 +3,9 @@ import { connect, connection } from "mongoose";
 
 config();
 
-const { USER_DB, PASS_DB, NAME_DB, CLUSTER_DB_URI } = process.env;
+const { MDB_DATABASE, MDB_USER, MDB_PASS, MDB_CLUSTER } = process.env;
 
-const URI_DB = `mongodb+srv://${USER_DB}:${PASS_DB}@${CLUSTER_DB_URI}/${NAME_DB}?retryWrites=true&w=majority`;
+const URI_DB = `mongodb+srv://${MDB_USER}:${MDB_PASS}@${MDB_CLUSTER}/${MDB_DATABASE}?retryWrites=true&w=majority`;
 
 export const connectDB = async () => {
   try {

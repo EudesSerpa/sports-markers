@@ -1,13 +1,33 @@
 import { Router } from "express";
-import { createTeam, getTeam, getTeams } from "../controllers/team.controller";
+import { validatorHandler } from "../middlewares/validator.handler";
+import {
+  getTeamSchema,
+  createTeamSchema,
+  updateTeamSchema,
+} from "../schemas/team.schema";
+import {
+  getTeam,
+  getTeams,
+  createTeam,
+  updateTeam,
+  deleteTeam,
+} from "../controllers/team.controller";
 
 const router: Router = Router();
 
-// TODO: Apply validations
 router.get("/", getTeams);
 
-router.get("/:id", getTeam);
+router.get("/:id", validatorHandler(getTeamSchema, "params"), getTeam);
 
-router.post("/", createTeam);
+router.post("/", validatorHandler(createTeamSchema, "body"), createTeam);
+
+router.patch(
+  "/:id",
+  validatorHandler(getTeamSchema, "params"),
+  validatorHandler(updateTeamSchema, "body"),
+  updateTeam
+);
+
+router.delete("/:id", validatorHandler(getTeamSchema, "params"), deleteTeam);
 
 export default router;

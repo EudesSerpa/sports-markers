@@ -1,7 +1,7 @@
 import { isValidObjectId } from "mongoose";
 import { CustomError } from "../models/custom-error.model";
-import { IUser } from "../interfaces/User";
-import { User } from "../models/user.model";
+import { IUser } from "../database/interfaces/User";
+import { User } from "../database/models/user.model";
 
 export class UsersService {
   constructor() {}

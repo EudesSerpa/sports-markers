@@ -13,8 +13,8 @@ exports.connectDB = void 0;
 const dotenv_1 = require("dotenv");
 const mongoose_1 = require("mongoose");
 (0, dotenv_1.config)();
-const { USER_DB, PASS_DB, NAME_DB, CLUSTER_DB_URI } = process.env;
-const URI_DB = `mongodb+srv://${USER_DB}:${PASS_DB}@${CLUSTER_DB_URI}/${NAME_DB}?retryWrites=true&w=majority`;
+const { MDB_DATABASE, MDB_USER, MDB_PASS, MDB_CLUSTER } = process.env;
+const URI_DB = `mongodb+srv://${MDB_USER}:${MDB_PASS}@${MDB_CLUSTER}/${MDB_DATABASE}?retryWrites=true&w=majority`;
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const conn = yield (0, mongoose_1.connect)(URI_DB, {

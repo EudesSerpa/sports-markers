@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.teamService = void 0;
 const mongoose_1 = require("mongoose");
 const custom_error_model_1 = require("../models/custom-error.model");
-const team_model_1 = require("../models/team.model");
+const team_model_1 = require("../database/models/team.model");
 class teamService {
     constructor() {
         _teamService_instances.add(this);
@@ -51,6 +51,28 @@ class teamService {
             };
             const teamCreated = yield team_model_1.Team.create(newTeam);
             return teamCreated;
+        });
+    }
+    update({ id, name, imageURI, }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            __classPrivateFieldGet(this, _teamService_instances, "m", _teamService_validateId).call(this, id);
+            const teamUpdated = yield team_model_1.Team.findByIdAndUpdate(id, { name, imageURI }, { returnDocument: "after" });
+            if (!teamUpdated) {
+                throw new custom_error_model_1.CustomError("Team doesn't exists", 404);
+            }
+            return teamUpdated;
+        });
+    }
+    delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            __classPrivateFieldGet(this, _teamService_instances, "m", _teamService_validateId).call(this, id);
+            const teamDeleted = yield team_model_1.Team.findByIdAndDelete(id);
+            if (!teamDeleted) {
+                return {
+                    info: "There's no any team to delete :)",
+                };
+            }
+            return teamDeleted;
         });
     }
 }

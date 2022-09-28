@@ -1,5 +1,4 @@
-/* A validation schema for the user. */
-
+/* A validation schema for the user */
 import Joi from "joi";
 
 const id = Joi.string();
