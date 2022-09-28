@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
-const users_services_1 = require("../services/users.services");
-const service = new users_services_1.UsersService();
+const user_service_1 = require("../services/user.service");
+const service = new user_service_1.UsersService();
 const getUsers = (_req, res, next) => {
     service
         .find()
