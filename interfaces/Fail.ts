@@ -1,4 +1,4 @@
-export interface Fail {
+export interface IFail {
   success: boolean;
   message: string;
 }

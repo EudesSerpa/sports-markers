@@ -1,0 +1,9 @@
+export class CustomError {
+  statusCode: number;
+  message: string;
+
+  constructor(message: string, statusCode: number = 500) {
+    this.statusCode = statusCode;
+    this.message = message;
+  }
+}
