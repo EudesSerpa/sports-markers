@@ -25,8 +25,7 @@ class UsersService {
     }
     find() {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield user_model_1.User.find({});
-            return users;
+            return yield user_model_1.User.find({});
         });
     }
     findOne(id) {
@@ -34,16 +33,16 @@ class UsersService {
             __classPrivateFieldGet(this, _UsersService_instances, "m", _UsersService_validateId).call(this, id);
             const user = yield user_model_1.User.findById(id);
             if (!user) {
-                throw new custom_error_model_1.CustomError("User doesn't exists", 404);
+                throw new custom_error_model_1.CustomError("User doesn't exist", 404);
             }
             return user;
         });
     }
     create({ username, password }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.User.findOne({ username });
-            if (user) {
-                throw new custom_error_model_1.CustomError("User already exists", 409);
+            const alreadyExist = yield user_model_1.User.exists({ username });
+            if (alreadyExist) {
+                throw new custom_error_model_1.CustomError("User already exist", 409);
             }
             const newUser = {
                 username,
@@ -56,9 +55,11 @@ class UsersService {
     update({ id, data }) {
         return __awaiter(this, void 0, void 0, function* () {
             __classPrivateFieldGet(this, _UsersService_instances, "m", _UsersService_validateId).call(this, id);
-            const userUpdated = yield user_model_1.User.findByIdAndUpdate(id, Object.assign({}, data), { returnDocument: "after" });
+            const userUpdated = yield user_model_1.User.findByIdAndUpdate(id, data, {
+                returnDocument: "after",
+            });
             if (!userUpdated) {
-                throw new custom_error_model_1.CustomError("User doesn't exists", 404);
+                throw new custom_error_model_1.CustomError("User doesn't exist", 404);
             }
             return userUpdated;
         });

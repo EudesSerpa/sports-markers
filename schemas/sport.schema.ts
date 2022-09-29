@@ -15,3 +15,7 @@ export const createSportSchema: Joi.Schema = Joi.object({
 export const updateSportSchema: Joi.Schema = Joi.object({
   name: name.required(),
 });
+
+export default {
+  name,
+};

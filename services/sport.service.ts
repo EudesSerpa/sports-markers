@@ -25,17 +25,17 @@ export class sportService {
     const sport = await Sport.findById(id);
 
     if (!sport) {
-      throw new CustomError("Sport doesn't exists", 404);
+      throw new CustomError("Sport doesn't exist", 404);
     }
 
     return sport;
   }
 
   async create({ name }: ISport): Promise<ISport> {
-    const sport = await Sport.findOne({ name });
+    const alreadyExist = await Sport.exists({ name });
 
-    if (sport) {
-      throw new CustomError("Sport already exists", 409);
+    if (alreadyExist) {
+      throw new CustomError("Sport already exist", 409);
     }
 
     const newSport: ISport = { name };
@@ -48,11 +48,9 @@ export class sportService {
   async update({ id, data }: { id: any; data: {} }): Promise<ISport> {
     this.#validateId(id);
 
-    const sportUpdated = await Sport.findByIdAndUpdate(
-      id,
-      { ...data },
-      { returnDocument: "after" }
-    );
+    const sportUpdated = await Sport.findByIdAndUpdate(id, data, {
+      returnDocument: "after",
+    });
 
     if (!sportUpdated) {
       throw new CustomError("Sport doesn't exists", 404);

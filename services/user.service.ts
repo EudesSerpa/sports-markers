@@ -16,9 +16,7 @@ export class UsersService {
   }
 
   async find(): Promise<IUser[]> {
-    const users = await User.find({});
-
-    return users;
+    return await User.find({});
   }
 
   async findOne(id: any): Promise<IUser> {
@@ -27,17 +25,17 @@ export class UsersService {
     const user = await User.findById(id);
 
     if (!user) {
-      throw new CustomError("User doesn't exists", 404);
+      throw new CustomError("User doesn't exist", 404);
     }
 
     return user;
   }
 
   async create({ username, password }: IUser): Promise<IUser> {
-    const user = await User.findOne({ username });
+    const alreadyExist = await User.exists({ username });
 
-    if (user) {
-      throw new CustomError("User already exists", 409);
+    if (alreadyExist) {
+      throw new CustomError("User already exist", 409);
     }
 
     const newUser: IUser = {
@@ -53,14 +51,12 @@ export class UsersService {
   async update({ id, data }: { id: any; data: {} }): Promise<IUser> {
     this.#validateId(id);
 
-    const userUpdated = await User.findByIdAndUpdate(
-      id,
-      { ...data },
-      { returnDocument: "after" }
-    );
+    const userUpdated = await User.findByIdAndUpdate(id, data, {
+      returnDocument: "after",
+    });
 
     if (!userUpdated) {
-      throw new CustomError("User doesn't exists", 404);
+      throw new CustomError("User doesn't exist", 404);
     }
 
     return userUpdated;

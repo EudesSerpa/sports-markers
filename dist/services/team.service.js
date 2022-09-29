@@ -25,8 +25,7 @@ class teamService {
     }
     find() {
         return __awaiter(this, void 0, void 0, function* () {
-            const teams = yield team_model_1.Team.find({});
-            return teams;
+            return yield team_model_1.Team.find({});
         });
     }
     findOne(id) {
@@ -34,16 +33,16 @@ class teamService {
             __classPrivateFieldGet(this, _teamService_instances, "m", _teamService_validateId).call(this, id);
             const team = yield team_model_1.Team.findById(id);
             if (!team) {
-                throw new custom_error_model_1.CustomError("Team doesn't exists", 404);
+                throw new custom_error_model_1.CustomError("Team doesn't exist", 404);
             }
             return team;
         });
     }
     create({ name, imageURI }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const team = yield team_model_1.Team.findOne({ name });
-            if (team) {
-                throw new custom_error_model_1.CustomError("Team already exists", 409);
+            const alreadyExist = yield team_model_1.Team.exists({ name });
+            if (alreadyExist) {
+                throw new custom_error_model_1.CustomError("Team already exist", 409);
             }
             const newTeam = {
                 name,
@@ -56,7 +55,9 @@ class teamService {
     update({ id, data }) {
         return __awaiter(this, void 0, void 0, function* () {
             __classPrivateFieldGet(this, _teamService_instances, "m", _teamService_validateId).call(this, id);
-            const teamUpdated = yield team_model_1.Team.findByIdAndUpdate(id, Object.assign({}, data), { returnDocument: "after" });
+            const teamUpdated = yield team_model_1.Team.findByIdAndUpdate(id, data, {
+                returnDocument: "after",
+            });
             if (!teamUpdated) {
                 throw new custom_error_model_1.CustomError("Team doesn't exists", 404);
             }

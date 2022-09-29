@@ -16,3 +16,6 @@ exports.createSportSchema = joi_1.default.object({
 exports.updateSportSchema = joi_1.default.object({
     name: name.required(),
 });
+exports.default = {
+    name,
+};

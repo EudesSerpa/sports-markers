@@ -16,9 +16,7 @@ export class teamService {
   }
 
   async find(): Promise<ITeam[]> {
-    const teams = await Team.find({});
-
-    return teams;
+    return await Team.find({});
   }
 
   async findOne(id: any): Promise<ITeam> {
@@ -27,17 +25,17 @@ export class teamService {
     const team = await Team.findById(id);
 
     if (!team) {
-      throw new CustomError("Team doesn't exists", 404);
+      throw new CustomError("Team doesn't exist", 404);
     }
 
     return team;
   }
 
   async create({ name, imageURI }: ITeam): Promise<ITeam> {
-    const team = await Team.findOne({ name });
+    const alreadyExist = await Team.exists({ name });
 
-    if (team) {
-      throw new CustomError("Team already exists", 409);
+    if (alreadyExist) {
+      throw new CustomError("Team already exist", 409);
     }
 
     const newTeam: ITeam = {
@@ -53,11 +51,9 @@ export class teamService {
   async update({ id, data }: { id: any; data: {} }): Promise<ITeam> {
     this.#validateId(id);
 
-    const teamUpdated = await Team.findByIdAndUpdate(
-      id,
-      { ...data },
-      { returnDocument: "after" }
-    );
+    const teamUpdated = await Team.findByIdAndUpdate(id, data, {
+      returnDocument: "after",
+    });
 
     if (!teamUpdated) {
       throw new CustomError("Team doesn't exists", 404);

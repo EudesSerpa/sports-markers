@@ -6,7 +6,7 @@ const teamSchema = new mongoose_1.Schema({
     name: {
         type: String,
         trim: true,
-        required: [true, "Team must has a name"],
+        required: [true, "Team must have a name"],
     },
     imageURI: {
         type: String,
