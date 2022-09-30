@@ -1,26 +1,17 @@
-import { isValidObjectId } from "mongoose";
-import { CustomError } from "../models/custom-error.model";
 import { ITeam } from "../database/interfaces/Team";
 import { Team } from "../database/models/team.model";
+import { CustomError } from "../models/custom-error.model";
+import { validateId } from "../helpers/db/validateId";
 
 export class teamService {
   constructor() {}
-
-  #validateId(id: any) {
-    if (!isValidObjectId(id)) {
-      throw new CustomError(
-        "Id is invalid. You must send a string of 12 Bytes or a string of 24 hex characters",
-        400
-      );
-    }
-  }
 
   async find(): Promise<ITeam[]> {
     return await Team.find({});
   }
 
   async findOne(id: any): Promise<ITeam> {
-    this.#validateId(id);
+    validateId(id);
 
     const team = await Team.findById(id);
 
@@ -49,7 +40,7 @@ export class teamService {
   }
 
   async update({ id, data }: { id: any; data: {} }): Promise<ITeam> {
-    this.#validateId(id);
+    validateId(id);
 
     const teamUpdated = await Team.findByIdAndUpdate(id, data, {
       returnDocument: "after",
@@ -63,7 +54,7 @@ export class teamService {
   }
 
   async delete(id: any): Promise<ITeam | object> {
-    this.#validateId(id);
+    validateId(id);
 
     const teamDeleted = await Team.findByIdAndDelete(id);
 

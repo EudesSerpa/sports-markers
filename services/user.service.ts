@@ -1,26 +1,17 @@
-import { isValidObjectId } from "mongoose";
-import { CustomError } from "../models/custom-error.model";
 import { IUser } from "../database/interfaces/User";
 import { User } from "../database/models/user.model";
+import { CustomError } from "../models/custom-error.model";
+import { validateId } from "../helpers/db/validateId";
 
 export class UsersService {
   constructor() {}
-
-  #validateId(id: any) {
-    if (!isValidObjectId(id)) {
-      throw new CustomError(
-        "Id is invalid. You must send a string of 12 Bytes or a string of 24 hex characters",
-        400
-      );
-    }
-  }
 
   async find(): Promise<IUser[]> {
     return await User.find({});
   }
 
   async findOne(id: any): Promise<IUser> {
-    this.#validateId(id);
+    validateId(id);
 
     const user = await User.findById(id);
 
@@ -49,7 +40,7 @@ export class UsersService {
   }
 
   async update({ id, data }: { id: any; data: {} }): Promise<IUser> {
-    this.#validateId(id);
+    validateId(id);
 
     const userUpdated = await User.findByIdAndUpdate(id, data, {
       returnDocument: "after",
@@ -63,7 +54,7 @@ export class UsersService {
   }
 
   async delete(id: any): Promise<IUser | object> {
-    this.#validateId(id);
+    validateId(id);
 
     const userDeleted = await User.findByIdAndDelete(id);
 

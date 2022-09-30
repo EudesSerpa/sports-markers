@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { teamService } from "../services/team.service";
-import { ISuccess } from "../interfaces/Success";
+import { successResponse } from "../helpers/network/response";
 
 const service = new teamService();
 
@@ -8,11 +8,7 @@ export const getTeams = (_req: Request, res: Response, next: NextFunction) => {
   service
     .find()
     .then((teams) => {
-      const successFetched: ISuccess = {
-        success: true,
-        data: teams,
-      };
-      res.status(200).json(successFetched);
+      successResponse(res, teams);
     })
     .catch(next);
 };
@@ -23,12 +19,7 @@ export const getTeam = (req: Request, res: Response, next: NextFunction) => {
   service
     .findOne(id)
     .then((team) => {
-      const successFetched: ISuccess = {
-        success: true,
-        data: team,
-      };
-
-      res.status(200).json(successFetched);
+      successResponse(res, team);
     })
     .catch(next);
 };
@@ -39,12 +30,7 @@ export const createTeam = (req: Request, res: Response, next: NextFunction) => {
   service
     .create({ name, imageURI: imageURI || null })
     .then((team) => {
-      const successCreated: ISuccess = {
-        success: true,
-        data: team,
-      };
-
-      res.status(201).json(successCreated);
+      successResponse(res, team, 201);
     })
     .catch(next);
 };
@@ -56,12 +42,7 @@ export const updateTeam = (req: Request, res: Response, next: NextFunction) => {
   service
     .update({ id, data })
     .then((teamUpdated) => {
-      const successUpdated: ISuccess = {
-        success: true,
-        data: teamUpdated,
-      };
-
-      res.status(200).json(successUpdated);
+      successResponse(res, teamUpdated);
     })
     .catch(next);
 };
@@ -72,12 +53,7 @@ export const deleteTeam = (req: Request, res: Response, next: NextFunction) => {
   service
     .delete(id)
     .then((teamDeleted) => {
-      const successDeleted: ISuccess = {
-        success: true,
-        data: teamDeleted,
-      };
-
-      res.status(200).json(successDeleted);
+      successResponse(res, teamDeleted);
     })
     .catch(next);
 };

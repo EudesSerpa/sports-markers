@@ -2,16 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTeam = exports.updateTeam = exports.createTeam = exports.getTeam = exports.getTeams = void 0;
 const team_service_1 = require("../services/team.service");
+const response_1 = require("../helpers/network/response");
 const service = new team_service_1.teamService();
 const getTeams = (_req, res, next) => {
     service
         .find()
         .then((teams) => {
-        const successFetched = {
-            success: true,
-            data: teams,
-        };
-        res.status(200).json(successFetched);
+        (0, response_1.successResponse)(res, teams);
     })
         .catch(next);
 };
@@ -21,11 +18,7 @@ const getTeam = (req, res, next) => {
     service
         .findOne(id)
         .then((team) => {
-        const successFetched = {
-            success: true,
-            data: team,
-        };
-        res.status(200).json(successFetched);
+        (0, response_1.successResponse)(res, team);
     })
         .catch(next);
 };
@@ -35,11 +28,7 @@ const createTeam = (req, res, next) => {
     service
         .create({ name, imageURI: imageURI || null })
         .then((team) => {
-        const successCreated = {
-            success: true,
-            data: team,
-        };
-        res.status(201).json(successCreated);
+        (0, response_1.successResponse)(res, team, 201);
     })
         .catch(next);
 };
@@ -50,11 +39,7 @@ const updateTeam = (req, res, next) => {
     service
         .update({ id, data })
         .then((teamUpdated) => {
-        const successUpdated = {
-            success: true,
-            data: teamUpdated,
-        };
-        res.status(200).json(successUpdated);
+        (0, response_1.successResponse)(res, teamUpdated);
     })
         .catch(next);
 };
@@ -64,11 +49,7 @@ const deleteTeam = (req, res, next) => {
     service
         .delete(id)
         .then((teamDeleted) => {
-        const successDeleted = {
-            success: true,
-            data: teamDeleted,
-        };
-        res.status(200).json(successDeleted);
+        (0, response_1.successResponse)(res, teamDeleted);
     })
         .catch(next);
 };

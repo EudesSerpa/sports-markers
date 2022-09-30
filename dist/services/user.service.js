@@ -8,21 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-};
-var _UsersService_instances, _UsersService_validateId;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
-const mongoose_1 = require("mongoose");
-const custom_error_model_1 = require("../models/custom-error.model");
 const user_model_1 = require("../database/models/user.model");
+const custom_error_model_1 = require("../models/custom-error.model");
+const validateId_1 = require("../helpers/db/validateId");
 class UsersService {
-    constructor() {
-        _UsersService_instances.add(this);
-    }
+    constructor() { }
     find() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield user_model_1.User.find({});
@@ -30,7 +22,7 @@ class UsersService {
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _UsersService_instances, "m", _UsersService_validateId).call(this, id);
+            (0, validateId_1.validateId)(id);
             const user = yield user_model_1.User.findById(id);
             if (!user) {
                 throw new custom_error_model_1.CustomError("User doesn't exist", 404);
@@ -54,7 +46,7 @@ class UsersService {
     }
     update({ id, data }) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _UsersService_instances, "m", _UsersService_validateId).call(this, id);
+            (0, validateId_1.validateId)(id);
             const userUpdated = yield user_model_1.User.findByIdAndUpdate(id, data, {
                 returnDocument: "after",
             });
@@ -66,7 +58,7 @@ class UsersService {
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _UsersService_instances, "m", _UsersService_validateId).call(this, id);
+            (0, validateId_1.validateId)(id);
             const userDeleted = yield user_model_1.User.findByIdAndDelete(id);
             if (!userDeleted) {
                 return {
@@ -78,8 +70,3 @@ class UsersService {
     }
 }
 exports.UsersService = UsersService;
-_UsersService_instances = new WeakSet(), _UsersService_validateId = function _UsersService_validateId(id) {
-    if (!(0, mongoose_1.isValidObjectId)(id)) {
-        throw new custom_error_model_1.CustomError("Id is invalid. You must send a string of 12 Bytes or a string of 24 hex characters", 400);
-    }
-};

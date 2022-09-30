@@ -8,21 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-};
-var _teamService_instances, _teamService_validateId;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.teamService = void 0;
-const mongoose_1 = require("mongoose");
-const custom_error_model_1 = require("../models/custom-error.model");
 const team_model_1 = require("../database/models/team.model");
+const custom_error_model_1 = require("../models/custom-error.model");
+const validateId_1 = require("../helpers/db/validateId");
 class teamService {
-    constructor() {
-        _teamService_instances.add(this);
-    }
+    constructor() { }
     find() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield team_model_1.Team.find({});
@@ -30,7 +22,7 @@ class teamService {
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _teamService_instances, "m", _teamService_validateId).call(this, id);
+            (0, validateId_1.validateId)(id);
             const team = yield team_model_1.Team.findById(id);
             if (!team) {
                 throw new custom_error_model_1.CustomError("Team doesn't exist", 404);
@@ -54,7 +46,7 @@ class teamService {
     }
     update({ id, data }) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _teamService_instances, "m", _teamService_validateId).call(this, id);
+            (0, validateId_1.validateId)(id);
             const teamUpdated = yield team_model_1.Team.findByIdAndUpdate(id, data, {
                 returnDocument: "after",
             });
@@ -66,7 +58,7 @@ class teamService {
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            __classPrivateFieldGet(this, _teamService_instances, "m", _teamService_validateId).call(this, id);
+            (0, validateId_1.validateId)(id);
             const teamDeleted = yield team_model_1.Team.findByIdAndDelete(id);
             if (!teamDeleted) {
                 return {
@@ -78,8 +70,3 @@ class teamService {
     }
 }
 exports.teamService = teamService;
-_teamService_instances = new WeakSet(), _teamService_validateId = function _teamService_validateId(id) {
-    if (!(0, mongoose_1.isValidObjectId)(id)) {
-        throw new custom_error_model_1.CustomError("Id is invalid. You must send a string of 12 Bytes or a string of 24 hex characters", 400);
-    }
-};

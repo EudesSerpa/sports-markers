@@ -1,26 +1,17 @@
-import { isValidObjectId } from "mongoose";
-import { CustomError } from "../models/custom-error.model";
 import { ISport } from "../database/interfaces/Sport";
 import { Sport } from "../database/models/sport.model";
+import { CustomError } from "../models/custom-error.model";
+import { validateId } from "../helpers/db/validateId";
 
 export class sportService {
   constructor() {}
-
-  #validateId(id: any) {
-    if (!isValidObjectId(id)) {
-      throw new CustomError(
-        "Id is invalid. You must send a string of 12 Bytes or a string of 24 hex characters",
-        400
-      );
-    }
-  }
 
   async find(): Promise<ISport[]> {
     return await Sport.find({});
   }
 
   async findOne(id: any): Promise<ISport> {
-    this.#validateId(id);
+    validateId(id);
 
     const sport = await Sport.findById(id);
 
@@ -46,7 +37,7 @@ export class sportService {
   }
 
   async update({ id, data }: { id: any; data: {} }): Promise<ISport> {
-    this.#validateId(id);
+    validateId(id);
 
     const sportUpdated = await Sport.findByIdAndUpdate(id, data, {
       returnDocument: "after",
@@ -60,7 +51,7 @@ export class sportService {
   }
 
   async delete(id: any): Promise<ISport | object> {
-    this.#validateId(id);
+    validateId(id);
 
     const sportDeleted = await Sport.findByIdAndDelete(id);
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../models/custom-error.model";
-import { IFail } from "../interfaces/Fail";
+import { failResponse } from "../helpers/network/response";
 
 /**
  * Log the error.
@@ -16,7 +16,8 @@ export function logErrors(
   _res: Response,
   next: NextFunction
 ) {
-  console.log("🚀 ~ file: error.handler.ts ~ line 11 ~ err", err.message);
+  console.log("🚀 ~ file: error.handler.ts ~ line 19 ~ err", err.message);
+
   next(err);
 }
 
@@ -41,10 +42,5 @@ export function errorHandler(
     customError = new CustomError(err.message);
   }
 
-  const failMessage: IFail = {
-    success: false,
-    message: customError.message,
-  };
-
-  res.status((customError as CustomError).statusCode).json(failMessage);
+  failResponse(res, customError.message, (<CustomError>customError).statusCode);
 }

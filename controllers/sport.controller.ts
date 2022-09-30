@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { sportService } from "../services/sport.service";
-import { ISuccess } from "../interfaces/Success";
+import { successResponse } from "../helpers/network/response";
 
 const service = new sportService();
 
@@ -8,11 +8,7 @@ export const getSports = (_req: Request, res: Response, next: NextFunction) => {
   service
     .find()
     .then((sports) => {
-      const successFetched: ISuccess = {
-        success: true,
-        data: sports,
-      };
-      res.status(200).json(successFetched);
+      successResponse(res, sports);
     })
     .catch(next);
 };
@@ -23,12 +19,7 @@ export const getSport = (req: Request, res: Response, next: NextFunction) => {
   service
     .findOne(id)
     .then((sport) => {
-      const successFetched: ISuccess = {
-        success: true,
-        data: sport,
-      };
-
-      res.status(200).json(successFetched);
+      successResponse(res, sport);
     })
     .catch(next);
 };
@@ -43,12 +34,7 @@ export const createSport = (
   service
     .create({ name })
     .then((sport) => {
-      const successCreated: ISuccess = {
-        success: true,
-        data: sport,
-      };
-
-      res.status(201).json(successCreated);
+      successResponse(res, sport, 201);
     })
     .catch(next);
 };
@@ -64,12 +50,7 @@ export const updateSport = (
   service
     .update({ id, data })
     .then((sportUpdated) => {
-      const successUpdated: ISuccess = {
-        success: true,
-        data: sportUpdated,
-      };
-
-      res.status(200).json(successUpdated);
+      successResponse(res, sportUpdated);
     })
     .catch(next);
 };
@@ -84,12 +65,7 @@ export const deleteSport = (
   service
     .delete(id)
     .then((sportDeleted) => {
-      const successDeleted: ISuccess = {
-        success: true,
-        data: sportDeleted,
-      };
-
-      res.status(200).json(successDeleted);
+      successResponse(res, sportDeleted);
     })
     .catch(next);
 };

@@ -2,16 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEvent = exports.updateEvent = exports.createEvent = exports.getEvent = exports.getEvents = void 0;
 const event_service_1 = require("../services/event.service");
+const response_1 = require("../helpers/network/response");
 const service = new event_service_1.eventService();
 const getEvents = (_req, res, next) => {
     service
         .find()
         .then((events) => {
-        const successFetched = {
-            success: true,
-            data: events,
-        };
-        res.status(200).json(successFetched);
+        (0, response_1.successResponse)(res, events);
     })
         .catch(next);
 };
@@ -21,11 +18,7 @@ const getEvent = (req, res, next) => {
     service
         .findOne(id)
         .then((event) => {
-        const successFetched = {
-            success: true,
-            data: event,
-        };
-        res.status(200).json(successFetched);
+        (0, response_1.successResponse)(res, event);
     })
         .catch(next);
 };
@@ -35,11 +28,7 @@ const createEvent = (req, res, next) => {
     service
         .create({ name, initDate, teams, sport, results })
         .then((event) => {
-        const successCreated = {
-            success: true,
-            data: event,
-        };
-        res.status(201).json(successCreated);
+        (0, response_1.successResponse)(res, event, 201);
     })
         .catch(next);
 };
@@ -50,11 +39,7 @@ const updateEvent = (req, res, next) => {
     service
         .update({ id, data })
         .then((eventUpdated) => {
-        const successUpdated = {
-            success: true,
-            data: eventUpdated,
-        };
-        res.status(200).json(successUpdated);
+        (0, response_1.successResponse)(res, eventUpdated);
     })
         .catch(next);
 };
@@ -64,11 +49,7 @@ const deleteEvent = (req, res, next) => {
     service
         .delete(id)
         .then((eventDeleted) => {
-        const successDeleted = {
-            success: true,
-            data: eventDeleted,
-        };
-        res.status(200).json(successDeleted);
+        (0, response_1.successResponse)(res, eventDeleted);
     })
         .catch(next);
 };

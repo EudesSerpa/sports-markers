@@ -1,26 +1,17 @@
-import { isValidObjectId } from "mongoose";
-import { CustomError } from "../models/custom-error.model";
 import { IEvent } from "../database/interfaces/Event";
 import { Event } from "../database/models/event.model";
+import { CustomError } from "../models/custom-error.model";
+import { validateId } from "../helpers/db/validateId";
 
 export class eventService {
   constructor() {}
 
-  #validateId(id: any) {
-    if (!isValidObjectId(id)) {
-      throw new CustomError(
-        "Id is invalid. You must send a string of 12 Bytes or a string of 24 hex characters",
-        400
-      );
-    }
-  }
-
   async find(): Promise<IEvent[]> {
-    return await Event.find({});
+    return await Event.find({}).lean();
   }
 
   async findOne(id: any): Promise<IEvent> {
-    this.#validateId(id);
+    validateId(id);
 
     const event = await Event.findById(id);
 
@@ -62,7 +53,7 @@ export class eventService {
       );
     }
 
-    this.#validateId(id);
+    validateId(id);
 
     const eventUpdated = await Event.findByIdAndUpdate(id, data, {
       returnDocument: "after",
@@ -76,7 +67,7 @@ export class eventService {
   }
 
   async delete(id: any): Promise<IEvent | object> {
-    this.#validateId(id);
+    validateId(id);
 
     const eventDeleted = await Event.findByIdAndDelete(id);
 

@@ -2,16 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteSport = exports.updateSport = exports.createSport = exports.getSport = exports.getSports = void 0;
 const sport_service_1 = require("../services/sport.service");
+const response_1 = require("../helpers/network/response");
 const service = new sport_service_1.sportService();
 const getSports = (_req, res, next) => {
     service
         .find()
         .then((sports) => {
-        const successFetched = {
-            success: true,
-            data: sports,
-        };
-        res.status(200).json(successFetched);
+        (0, response_1.successResponse)(res, sports);
     })
         .catch(next);
 };
@@ -21,11 +18,7 @@ const getSport = (req, res, next) => {
     service
         .findOne(id)
         .then((sport) => {
-        const successFetched = {
-            success: true,
-            data: sport,
-        };
-        res.status(200).json(successFetched);
+        (0, response_1.successResponse)(res, sport);
     })
         .catch(next);
 };
@@ -35,11 +28,7 @@ const createSport = (req, res, next) => {
     service
         .create({ name })
         .then((sport) => {
-        const successCreated = {
-            success: true,
-            data: sport,
-        };
-        res.status(201).json(successCreated);
+        (0, response_1.successResponse)(res, sport, 201);
     })
         .catch(next);
 };
@@ -50,11 +39,7 @@ const updateSport = (req, res, next) => {
     service
         .update({ id, data })
         .then((sportUpdated) => {
-        const successUpdated = {
-            success: true,
-            data: sportUpdated,
-        };
-        res.status(200).json(successUpdated);
+        (0, response_1.successResponse)(res, sportUpdated);
     })
         .catch(next);
 };
@@ -64,11 +49,7 @@ const deleteSport = (req, res, next) => {
     service
         .delete(id)
         .then((sportDeleted) => {
-        const successDeleted = {
-            success: true,
-            data: sportDeleted,
-        };
-        res.status(200).json(successDeleted);
+        (0, response_1.successResponse)(res, sportDeleted);
     })
         .catch(next);
 };
