@@ -13,6 +13,9 @@ exports.UsersService = void 0;
 const user_model_1 = require("../database/models/user.model");
 const custom_error_model_1 = require("../models/custom-error.model");
 const validateId_1 = require("../helpers/db/validateId");
+const hash_password_1 = require("../helpers/security/hash-password");
+const verify_password_1 = require("../helpers/security/verify-password");
+const token_sign_1 = require("../helpers/auth/token-sign");
 class UsersService {
     constructor() { }
     find() {
@@ -30,7 +33,16 @@ class UsersService {
             return user;
         });
     }
-    create({ username, password }) {
+    findByUsername(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_model_1.User.findOne({ username });
+            if (!user) {
+                throw new custom_error_model_1.CustomError("User doesn't exist", 404);
+            }
+            return user;
+        });
+    }
+    register({ username, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             const alreadyExist = yield user_model_1.User.exists({ username });
             if (alreadyExist) {
@@ -38,10 +50,29 @@ class UsersService {
             }
             const newUser = {
                 username,
-                password,
+                password: yield (0, hash_password_1.hashPassword)(password),
             };
             const userCreated = yield user_model_1.User.create(newUser);
-            return userCreated;
+            const userData = {
+                _id: userCreated._id,
+                username: userCreated.username,
+            };
+            return userData;
+        });
+    }
+    login({ username, password }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.findByUsername(username);
+            const areCredentials = yield (0, verify_password_1.verifyPassword)(password, user.password);
+            if (!areCredentials) {
+                throw new custom_error_model_1.CustomError("Invalid credentials", 403);
+            }
+            const payload = {
+                sub: user._id,
+                username: user.username,
+            };
+            const jwt = (0, token_sign_1.getSignedToken)(payload, { expiresIn: "7d" });
+            return { jwt };
         });
     }
     update({ id, data }) {

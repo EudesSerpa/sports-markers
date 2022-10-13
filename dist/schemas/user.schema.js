@@ -7,7 +7,7 @@ exports.updateUserSchema = exports.createUserSchema = exports.getUserSchema = vo
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.string();
 const username = joi_1.default.string().min(3).max(15);
-const password = joi_1.default.string().alphanum().min(3).max(8);
+const password = joi_1.default.string().alphanum().min(3).max(12);
 exports.getUserSchema = joi_1.default.object({
     id: id.required(),
 });

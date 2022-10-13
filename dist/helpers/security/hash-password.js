@@ -9,23 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectDB = void 0;
-const mongoose_1 = require("mongoose");
-const config_1 = require("../config/config");
-const URI_DB = config_1.conf.uriDB;
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const conn = yield (0, mongoose_1.connect)(URI_DB, {
-            keepAlive: true,
-            keepAliveInitialDelay: 300000,
-        });
-        console.log("Connected to DB", conn.connection.db.databaseName);
-    }
-    catch (error) {
-        console.error("Error on connection DB", error);
-    }
-});
-exports.connectDB = connectDB;
-mongoose_1.connection.on("disconnected", (err) => {
-    console.error("Disconnected from DB", err);
-});
+exports.hashPassword = void 0;
+const bcryptjs_1 = require("bcryptjs");
+const SALT_ROUNDS = 10;
+const hashPassword = (password) => __awaiter(void 0, void 0, void 0, function* () { return yield (0, bcryptjs_1.hash)(password, SALT_ROUNDS); });
+exports.hashPassword = hashPassword;

@@ -1,16 +1,17 @@
 import express, { Express } from "express";
 import cors, { CorsOptions } from "cors";
-import { config } from "dotenv";
-import { router } from "./routes";
+import passport from "passport";
 import { errorHandler, logErrors } from "./middlewares/error.handler";
 import { connectDB } from "./database";
+import { router } from "./routes";
+import { conf } from "./config/config";
+import "./utils/auth/index";
 
-config();
 connectDB();
 
 const app: Express = express();
-const port = process.env.PORT || 3000;
-const whiteList: string[] = ["http://127.0.0.1:5500"];
+const port = conf.port;
+const whiteList: string[] = ["http://127.0.0.1:5173"];
 
 const options: CorsOptions = {
   origin: (origin, callback) => {
@@ -24,6 +25,7 @@ const options: CorsOptions = {
 
 app.use(cors(options));
 app.use(express.json());
+app.use(passport.initialize());
 
 router(app);
 

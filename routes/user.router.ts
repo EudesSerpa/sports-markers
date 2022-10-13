@@ -6,7 +6,8 @@ import {
   getUserSchema,
 } from "../schemas/user.schema";
 import {
-  createUser,
+  userLogin,
+  userRegister,
   deleteUser,
   getUser,
   getUsers,
@@ -19,7 +20,13 @@ router.get("/", getUsers);
 
 router.get("/:id", validatorHandler(getUserSchema, "params"), getUser);
 
-router.post("/", validatorHandler(createUserSchema, "body"), createUser);
+router.post(
+  "/register",
+  validatorHandler(createUserSchema, "body"),
+  userRegister
+);
+
+router.post("/login", validatorHandler(createUserSchema, "body"), userLogin);
 
 router.patch(
   "/:id",

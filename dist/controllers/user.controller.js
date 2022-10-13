@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
+exports.deleteUser = exports.updateUser = exports.userLogin = exports.userRegister = exports.getUser = exports.getUsers = void 0;
 const user_service_1 = require("../services/user.service");
 const response_1 = require("../helpers/network/response");
 const service = new user_service_1.UsersService();
@@ -23,16 +23,26 @@ const getUser = (req, res, next) => {
         .catch(next);
 };
 exports.getUser = getUser;
-const createUser = (req, res, next) => {
+const userRegister = (req, res, next) => {
     const { username, password } = req.body;
     service
-        .create({ username, password })
+        .register({ username, password })
         .then((user) => {
         (0, response_1.successResponse)(res, user, 201);
     })
         .catch(next);
 };
-exports.createUser = createUser;
+exports.userRegister = userRegister;
+const userLogin = (req, res, next) => {
+    const { username, password } = req.body;
+    service
+        .login({ username, password })
+        .then((data) => {
+        (0, response_1.successResponse)(res, data, 200);
+    })
+        .catch(next);
+};
+exports.userLogin = userLogin;
 const updateUser = (req, res, next) => {
     const { id } = req.params;
     const data = req.body;

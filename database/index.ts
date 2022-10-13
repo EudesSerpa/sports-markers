@@ -1,11 +1,7 @@
-import { config } from "dotenv";
 import { connect, connection } from "mongoose";
+import { conf } from "../config/config";
 
-config();
-
-const { MDB_DATABASE, MDB_USER, MDB_PASS, MDB_CLUSTER } = process.env;
-
-const URI_DB = `mongodb+srv://${MDB_USER}:${MDB_PASS}@${MDB_CLUSTER}/${MDB_DATABASE}?retryWrites=true&w=majority`;
+const URI_DB = conf.uriDB;
 
 export const connectDB = async () => {
   try {

@@ -24,13 +24,28 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
     .catch(next);
 };
 
-export const createUser = (req: Request, res: Response, next: NextFunction) => {
+export const userRegister = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { username, password } = req.body;
 
   service
-    .create({ username, password })
+    .register({ username, password })
     .then((user) => {
       successResponse(res, user, 201);
+    })
+    .catch(next);
+};
+
+export const userLogin = (req: Request, res: Response, next: NextFunction) => {
+  const { username, password } = req.body;
+
+  service
+    .login({ username, password })
+    .then((data) => {
+      successResponse(res, data, 200);
     })
     .catch(next);
 };

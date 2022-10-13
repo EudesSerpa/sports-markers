@@ -3,7 +3,7 @@ import Joi from "joi";
 
 const id = Joi.string();
 const username = Joi.string().min(3).max(15);
-const password = Joi.string().alphanum().min(3).max(8);
+const password = Joi.string().alphanum().min(3).max(12);
 
 export const getUserSchema: Joi.Schema = Joi.object({
   id: id.required(),
