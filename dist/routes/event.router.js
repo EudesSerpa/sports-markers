@@ -5,7 +5,7 @@ const validator_handler_1 = require("../middlewares/validator.handler");
 const event_controller_1 = require("../controllers/event.controller");
 const event_schema_1 = require("../schemas/event.schema");
 const router = (0, express_1.Router)();
-router.get("/", event_controller_1.getEvents);
+router.get("/", (0, validator_handler_1.validatorHandler)(event_schema_1.queryEventScheme, "query"), event_controller_1.getEvents);
 router.get("/:id", (0, validator_handler_1.validatorHandler)(event_schema_1.getEventSchema, "params"), event_controller_1.getEvent);
 router.post("/", (0, validator_handler_1.validatorHandler)(event_schema_1.createEventSchema, "body"), event_controller_1.createEvent);
 router.patch("/:id", (0, validator_handler_1.validatorHandler)(event_schema_1.getEventSchema, "params"), (0, validator_handler_1.validatorHandler)(event_schema_1.updateEventSchema, "body"), event_controller_1.updateEvent);

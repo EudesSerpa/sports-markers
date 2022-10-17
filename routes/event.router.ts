@@ -10,12 +10,13 @@ import {
 import {
   createEventSchema,
   getEventSchema,
+  queryEventScheme,
   updateEventSchema,
 } from "../schemas/event.schema";
 
 const router: Router = Router();
 
-router.get("/", getEvents);
+router.get("/", validatorHandler(queryEventScheme, "query"), getEvents);
 
 router.get("/:id", validatorHandler(getEventSchema, "params"), getEvent);
 

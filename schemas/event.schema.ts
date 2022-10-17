@@ -14,6 +14,8 @@ const teams = Joi.array()
 const sport = Joi.object({
   name: Joi.string().min(3).max(20).required(),
 });
+const limit = Joi.number().integer();
+const offset = Joi.number().integer();
 
 export const getEventSchema: Joi.Schema = Joi.object({
   id: id.required(),
@@ -33,4 +35,9 @@ export const updateEventSchema: Joi.Schema = Joi.object({
   teams,
   sport,
   results,
+});
+
+export const queryEventScheme: Joi.Schema = Joi.object({
+  limit,
+  offset,
 });

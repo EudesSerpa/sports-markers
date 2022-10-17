@@ -4,7 +4,20 @@ exports.deleteEvent = exports.updateEvent = exports.createEvent = exports.getEve
 const event_service_1 = require("../services/event.service");
 const response_1 = require("../helpers/network/response");
 const service = new event_service_1.eventService();
-const getEvents = (_req, res, next) => {
+const getEvents = (req, res, next) => {
+    const { limit, offset } = req.query;
+    if (limit && offset) {
+        service
+            .findWithPagination({
+            limit: Number(limit),
+            offset: Number(offset),
+        })
+            .then((events) => {
+            (0, response_1.successResponse)(res, events);
+        })
+            .catch(next);
+        return;
+    }
     service
         .find()
         .then((events) => {

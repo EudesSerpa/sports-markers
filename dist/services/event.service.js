@@ -20,6 +20,15 @@ class eventService {
             return yield event_model_1.Event.find({}).lean();
         });
     }
+    findWithPagination({ limit = 5, offset = 0, }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const options = {
+                limit,
+                skip: offset,
+            };
+            return yield event_model_1.Event.find({}, null, options).lean();
+        });
+    }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
             (0, validateId_1.validateId)(id);

@@ -10,6 +10,21 @@ export class eventService {
     return await Event.find({}).lean();
   }
 
+  async findWithPagination({
+    limit = 5,
+    offset = 0,
+  }: {
+    limit: number;
+    offset: number;
+  }): Promise<IEvent[]> {
+    const options = {
+      limit,
+      skip: offset,
+    };
+
+    return await Event.find({}, null, options).lean();
+  }
+
   async findOne(id: any): Promise<IEvent> {
     validateId(id);
 

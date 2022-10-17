@@ -4,7 +4,23 @@ import { successResponse } from "../helpers/network/response";
 
 const service = new eventService();
 
-export const getEvents = (_req: Request, res: Response, next: NextFunction) => {
+export const getEvents = (req: Request, res: Response, next: NextFunction) => {
+  const { limit, offset } = req.query;
+
+  if (limit && offset) {
+    service
+      .findWithPagination({
+        limit: Number(limit),
+        offset: Number(offset),
+      })
+      .then((events) => {
+        successResponse(res, events);
+      })
+      .catch(next);
+
+    return;
+  }
+
   service
     .find()
     .then((events) => {
