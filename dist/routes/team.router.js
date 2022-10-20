@@ -5,7 +5,7 @@ const validator_handler_1 = require("../middlewares/validator.handler");
 const team_schema_1 = require("../schemas/team.schema");
 const team_controller_1 = require("../controllers/team.controller");
 const router = (0, express_1.Router)();
-router.get("/", team_controller_1.getTeams);
+router.get("/", (0, validator_handler_1.validatorHandler)(team_schema_1.queryTeamScheme, "query"), team_controller_1.getTeams);
 router.get("/:id", (0, validator_handler_1.validatorHandler)(team_schema_1.getTeamSchema, "params"), team_controller_1.getTeam);
 router.post("/", (0, validator_handler_1.validatorHandler)(team_schema_1.createTeamSchema, "body"), team_controller_1.createTeam);
 router.patch("/:id", (0, validator_handler_1.validatorHandler)(team_schema_1.getTeamSchema, "params"), (0, validator_handler_1.validatorHandler)(team_schema_1.updateTeamSchema, "body"), team_controller_1.updateTeam);

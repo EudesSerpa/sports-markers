@@ -15,18 +15,25 @@ const custom_error_model_1 = require("../models/custom-error.model");
 const validateId_1 = require("../helpers/db/validateId");
 class eventService {
     constructor() { }
-    find() {
+    find({ limit, offset, userId }) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield event_model_1.Event.find({}).lean();
-        });
-    }
-    findWithPagination({ limit = 5, offset = 0, }) {
-        return __awaiter(this, void 0, void 0, function* () {
+            const filter = {};
             const options = {
-                limit,
-                skip: offset,
+                sort: {
+                    createdAt: "desc",
+                },
             };
-            return yield event_model_1.Event.find({}, null, options).lean();
+            if (userId) {
+                filter.userId = userId;
+            }
+            if (limit && offset) {
+                options.limit = limit;
+                options.skip = offset;
+            }
+            else if (limit) {
+                options.limit = limit;
+            }
+            return yield event_model_1.Event.find(filter, null, options).lean();
         });
     }
     findOne(id) {
@@ -39,13 +46,13 @@ class eventService {
             return event;
         });
     }
-    create({ name, initDate, teams, sport, results, }) {
+    create({ userId, name, initDate, teams, sport, results, }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const alreadyExist = yield event_model_1.Event.exists({ name, initDate });
+            const alreadyExist = yield event_model_1.Event.exists({ userId, name, initDate });
             if (alreadyExist) {
-                throw new custom_error_model_1.CustomError("Event already created previously with the same name and date", 409);
+                throw new custom_error_model_1.CustomError("This user has previously created an event with the same name and date", 409);
             }
-            const newEvent = { name, initDate, teams, sport, results };
+            const newEvent = { userId, name, initDate, teams, sport, results };
             const sportCreated = yield event_model_1.Event.create(newEvent);
             return sportCreated;
         });

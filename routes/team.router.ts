@@ -4,6 +4,7 @@ import {
   getTeamSchema,
   createTeamSchema,
   updateTeamSchema,
+  queryTeamScheme,
 } from "../schemas/team.schema";
 import {
   getTeam,
@@ -15,7 +16,7 @@ import {
 
 const router: Router = Router();
 
-router.get("/", getTeams);
+router.get("/", validatorHandler(queryTeamScheme, "query"), getTeams);
 
 router.get("/:id", validatorHandler(getTeamSchema, "params"), getTeam);
 

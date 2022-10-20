@@ -4,9 +4,11 @@ import { successResponse } from "../helpers/network/response";
 
 const service = new teamService();
 
-export const getTeams = (_req: Request, res: Response, next: NextFunction) => {
+export const getTeams = (req: Request, res: Response, next: NextFunction) => {
+  const { sport } = req.query;
+
   service
-    .find()
+    .find({ sport })
     .then((teams) => {
       successResponse(res, teams);
     })
@@ -25,10 +27,10 @@ export const getTeam = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const createTeam = (req: Request, res: Response, next: NextFunction) => {
-  const { name, imageURI } = req.body;
+  const { name, sport, imageURI } = req.body;
 
   service
-    .create({ name, imageURI: imageURI || null })
+    .create({ name, sport, imageURI: imageURI || null })
     .then((team) => {
       successResponse(res, team, 201);
     })

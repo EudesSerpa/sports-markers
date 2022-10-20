@@ -6,8 +6,14 @@ import { validateId } from "../helpers/db/validateId";
 export class teamService {
   constructor() {}
 
-  async find(): Promise<ITeam[]> {
-    return await Team.find({});
+  async find({ sport }: any): Promise<ITeam[]> {
+    const filter: any = {};
+
+    if (sport) {
+      filter.sport = sport;
+    }
+
+    return await Team.find(filter);
   }
 
   async findOne(id: any): Promise<ITeam> {
@@ -22,8 +28,8 @@ export class teamService {
     return team;
   }
 
-  async create({ name, imageURI }: ITeam): Promise<ITeam> {
-    const alreadyExist = await Team.exists({ name });
+  async create({ name, sport, imageURI }: ITeam): Promise<ITeam> {
+    const alreadyExist = await Team.exists({ name, sport });
 
     if (alreadyExist) {
       throw new CustomError("Team already exist", 409);
@@ -31,6 +37,7 @@ export class teamService {
 
     const newTeam: ITeam = {
       name,
+      sport,
       imageURI,
     };
 

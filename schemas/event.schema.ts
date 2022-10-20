@@ -2,6 +2,7 @@
 import Joi from "joi";
 
 const id = Joi.string();
+const userId = Joi.string();
 const name = Joi.string().min(3).max(60);
 const initDate = Joi.date();
 const results = Joi.array().items(Joi.number().min(0).integer());
@@ -22,6 +23,7 @@ export const getEventSchema: Joi.Schema = Joi.object({
 });
 
 export const createEventSchema: Joi.Schema = Joi.object({
+  userId: userId.required(),
   name: name.required(),
   initDate: initDate.required(),
   teams: teams.required(),

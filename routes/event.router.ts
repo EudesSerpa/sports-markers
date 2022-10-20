@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { validatorHandler } from "../middlewares/validator.handler";
+import { userAuth } from "../middlewares/user-auth.handler";
 import {
   createEvent,
   deleteEvent,
@@ -20,7 +21,12 @@ router.get("/", validatorHandler(queryEventScheme, "query"), getEvents);
 
 router.get("/:id", validatorHandler(getEventSchema, "params"), getEvent);
 
-router.post("/", validatorHandler(createEventSchema, "body"), createEvent);
+router.post(
+  "/",
+  validatorHandler(createEventSchema, "body"),
+  userAuth,
+  createEvent
+);
 
 router.patch(
   "/:id",

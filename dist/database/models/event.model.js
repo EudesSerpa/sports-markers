@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Event = void 0;
 const mongoose_1 = require("mongoose");
 const eventSchema = new mongoose_1.Schema({
+    userId: {
+        type: mongoose_1.Types.ObjectId,
+        required: [true, "Event must have a related user by its id (userId)"],
+    },
     name: {
         type: String,
         trim: true,
@@ -19,7 +23,7 @@ const eventSchema = new mongoose_1.Schema({
     },
     teams: {
         type: [
-            new mongoose_1.Schema({ name: String, imageURI: String }, { _id: false }),
+            new mongoose_1.Schema({ name: String, sport: String, imageURI: String }, { _id: false }),
         ],
         required: [true, "Event must have two teams as items of the teams array"],
     },

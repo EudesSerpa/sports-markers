@@ -8,6 +8,11 @@ const teamSchema = new mongoose_1.Schema({
         trim: true,
         required: [true, "Team must have a name"],
     },
+    sport: {
+        type: String,
+        trim: true,
+        required: [true, "Team must have an associated sport"],
+    },
     imageURI: {
         type: String,
     },

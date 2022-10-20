@@ -15,9 +15,13 @@ const custom_error_model_1 = require("../models/custom-error.model");
 const validateId_1 = require("../helpers/db/validateId");
 class teamService {
     constructor() { }
-    find() {
+    find({ sport }) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield team_model_1.Team.find({});
+            const filter = {};
+            if (sport) {
+                filter.sport = sport;
+            }
+            return yield team_model_1.Team.find(filter);
         });
     }
     findOne(id) {
@@ -30,14 +34,15 @@ class teamService {
             return team;
         });
     }
-    create({ name, imageURI }) {
+    create({ name, sport, imageURI }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const alreadyExist = yield team_model_1.Team.exists({ name });
+            const alreadyExist = yield team_model_1.Team.exists({ name, sport });
             if (alreadyExist) {
                 throw new custom_error_model_1.CustomError("Team already exist", 409);
             }
             const newTeam = {
                 name,
+                sport,
                 imageURI,
             };
             const teamCreated = yield team_model_1.Team.create(newTeam);

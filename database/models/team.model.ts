@@ -8,6 +8,11 @@ const teamSchema: Schema = new Schema<ITeam>(
       trim: true,
       required: [true, "Team must have a name"],
     },
+    sport: {
+      type: String,
+      trim: true,
+      required: [true, "Team must have an associated sport"],
+    },
     imageURI: {
       type: String,
     },

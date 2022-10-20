@@ -4,9 +4,10 @@ exports.deleteTeam = exports.updateTeam = exports.createTeam = exports.getTeam =
 const team_service_1 = require("../services/team.service");
 const response_1 = require("../helpers/network/response");
 const service = new team_service_1.teamService();
-const getTeams = (_req, res, next) => {
+const getTeams = (req, res, next) => {
+    const { sport } = req.query;
     service
-        .find()
+        .find({ sport })
         .then((teams) => {
         (0, response_1.successResponse)(res, teams);
     })
@@ -24,9 +25,9 @@ const getTeam = (req, res, next) => {
 };
 exports.getTeam = getTeam;
 const createTeam = (req, res, next) => {
-    const { name, imageURI } = req.body;
+    const { name, sport, imageURI } = req.body;
     service
-        .create({ name, imageURI: imageURI || null })
+        .create({ name, sport, imageURI: imageURI || null })
         .then((team) => {
         (0, response_1.successResponse)(res, team, 201);
     })

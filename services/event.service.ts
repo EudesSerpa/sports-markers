@@ -6,23 +6,28 @@ import { validateId } from "../helpers/db/validateId";
 export class eventService {
   constructor() {}
 
-  async find(): Promise<IEvent[]> {
-    return await Event.find({}).lean();
-  }
-
-  async findWithPagination({
-    limit = 5,
-    offset = 0,
-  }: {
-    limit: number;
-    offset: number;
-  }): Promise<IEvent[]> {
-    const options = {
-      limit,
-      skip: offset,
+  async find({ limit, offset, userId }: any): Promise<IEvent[]> {
+    const filter: any = {};
+    const options: any = {
+      sort: {
+        createdAt: "desc",
+      },
     };
 
-    return await Event.find({}, null, options).lean();
+    // filtered
+    if (userId) {
+      filter.userId = userId;
+    }
+
+    // Paginated or limited
+    if (limit && offset) {
+      options.limit = limit;
+      options.skip = offset;
+    } else if (limit) {
+      options.limit = limit;
+    }
+
+    return await Event.find(filter, null, options).lean();
   }
 
   async findOne(id: any): Promise<IEvent> {
@@ -38,22 +43,23 @@ export class eventService {
   }
 
   async create({
+    userId,
     name,
     initDate,
     teams,
     sport,
     results,
   }: IEvent): Promise<IEvent> {
-    const alreadyExist = await Event.exists({ name, initDate });
+    const alreadyExist = await Event.exists({ userId, name, initDate });
 
     if (alreadyExist) {
       throw new CustomError(
-        "Event already created previously with the same name and date",
+        "This user has previously created an event with the same name and date",
         409
       );
     }
 
-    const newEvent: IEvent = { name, initDate, teams, sport, results };
+    const newEvent: IEvent = { userId, name, initDate, teams, sport, results };
 
     const sportCreated = await Event.create(newEvent);
 

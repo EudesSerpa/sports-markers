@@ -6,23 +6,10 @@ const service = new eventService();
 
 export const getEvents = (req: Request, res: Response, next: NextFunction) => {
   const { limit, offset } = req.query;
-
-  if (limit && offset) {
-    service
-      .findWithPagination({
-        limit: Number(limit),
-        offset: Number(offset),
-      })
-      .then((events) => {
-        successResponse(res, events);
-      })
-      .catch(next);
-
-    return;
-  }
+  const { userId } = req.body;
 
   service
-    .find()
+    .find({ userId, limit: Number(limit), offset: Number(offset) })
     .then((events) => {
       successResponse(res, events);
     })
@@ -45,10 +32,10 @@ export const createEvent = (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, initDate, teams, sport, results } = req.body;
+  const { userId, name, initDate, teams, sport, results } = req.body;
 
   service
-    .create({ name, initDate, teams, sport, results })
+    .create({ userId, name, initDate, teams, sport, results })
     .then((event) => {
       successResponse(res, event, 201);
     })

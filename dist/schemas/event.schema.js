@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.queryEventScheme = exports.updateEventSchema = exports.createEventSchema = exports.getEventSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.string();
+const userId = joi_1.default.string();
 const name = joi_1.default.string().min(3).max(60);
 const initDate = joi_1.default.date();
 const results = joi_1.default.array().items(joi_1.default.number().min(0).integer());
@@ -24,6 +25,7 @@ exports.getEventSchema = joi_1.default.object({
     id: id.required(),
 });
 exports.createEventSchema = joi_1.default.object({
+    userId: userId.required(),
     name: name.required(),
     initDate: initDate.required(),
     teams: teams.required(),

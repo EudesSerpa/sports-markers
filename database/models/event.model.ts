@@ -14,6 +14,10 @@ type EventModelType = Model<IEvent, {}, EventDocumentOverrides>;
 
 const eventSchema: Schema = new Schema<IEvent, EventModelType>(
   {
+    userId: {
+      type: Types.ObjectId,
+      required: [true, "Event must have a related user by its id (userId)"],
+    },
     name: {
       type: String,
       trim: true,
@@ -30,7 +34,10 @@ const eventSchema: Schema = new Schema<IEvent, EventModelType>(
     },
     teams: {
       type: [
-        new Schema<ITeam>({ name: String, imageURI: String }, { _id: false }),
+        new Schema<ITeam>(
+          { name: String, sport: String, imageURI: String },
+          { _id: false }
+        ),
       ],
       required: [true, "Event must have two teams as items of the teams array"],
     },

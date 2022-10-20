@@ -6,20 +6,9 @@ const response_1 = require("../helpers/network/response");
 const service = new event_service_1.eventService();
 const getEvents = (req, res, next) => {
     const { limit, offset } = req.query;
-    if (limit && offset) {
-        service
-            .findWithPagination({
-            limit: Number(limit),
-            offset: Number(offset),
-        })
-            .then((events) => {
-            (0, response_1.successResponse)(res, events);
-        })
-            .catch(next);
-        return;
-    }
+    const { userId } = req.body;
     service
-        .find()
+        .find({ userId, limit: Number(limit), offset: Number(offset) })
         .then((events) => {
         (0, response_1.successResponse)(res, events);
     })
@@ -37,9 +26,9 @@ const getEvent = (req, res, next) => {
 };
 exports.getEvent = getEvent;
 const createEvent = (req, res, next) => {
-    const { name, initDate, teams, sport, results } = req.body;
+    const { userId, name, initDate, teams, sport, results } = req.body;
     service
-        .create({ name, initDate, teams, sport, results })
+        .create({ userId, name, initDate, teams, sport, results })
         .then((event) => {
         (0, response_1.successResponse)(res, event, 201);
     })

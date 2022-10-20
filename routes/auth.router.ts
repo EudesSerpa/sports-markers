@@ -1,32 +1,21 @@
-import { Router, Request, Response, NextFunction } from "express";
-import passport from "passport";
-import { getSignedToken } from "../helpers/auth/token-sign";
-import { successResponse } from "../helpers/network/response";
+import { Router } from "express";
+import { createEventSchema, queryEventScheme } from "../schemas/event.schema";
+import { createTeamSchema } from "../schemas/team.schema";
 import { validatorHandler } from "../middlewares/validator.handler";
-import { createUserSchema } from "../schemas/user.schema";
+import { createEvent, getEvents } from "../controllers/event.controller";
+import { createTeam } from "../controllers/team.controller";
 
 const router: Router = Router();
 
+// Events
+router.get("/events", validatorHandler(queryEventScheme, "query"), getEvents);
 router.post(
-  "/login",
-  validatorHandler(createUserSchema, "body"),
-  passport.authenticate("local", { session: false }),
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const user: any = req.user;
-
-      const payload = {
-        sub: user._id,
-        username: user.username,
-      };
-
-      const jwt = getSignedToken(payload, { expiresIn: "7d" });
-
-      successResponse(res, { jwt }, 200);
-    } catch (error) {
-      next(error);
-    }
-  }
+  "/events",
+  validatorHandler(createEventSchema, "body"),
+  createEvent
 );
+
+// Teams
+router.post("/teams", validatorHandler(createTeamSchema, "body"), createTeam);
 
 export default router;

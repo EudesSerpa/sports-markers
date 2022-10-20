@@ -3,13 +3,17 @@ import { conf } from "../../config/config";
 import { CustomError } from "../../models/custom-error.model";
 
 export const verifyToken = (jwt: string): void | any => {
-  const decodedPayload = verify(jwt, <string>conf.jwtKey, (err, decoded) => {
-    if (err) {
-      throw new CustomError(err.message, 401);
-    }
+  const decodedPayload: any = verify(
+    jwt,
+    <string>conf.jwtKey,
+    (err, decoded) => {
+      if (err) {
+        throw new CustomError(err.message, 401);
+      }
 
-    return decoded;
-  });
+      return decoded;
+    }
+  );
 
   return decodedPayload;
 };

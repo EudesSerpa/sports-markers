@@ -1,5 +1,6 @@
 {
   "dotenv.enableAutocloaking": true,
   "deno.enable": false,
-  "deno.lint": false
+  "deno.lint": false,
+  "docwriter.style": "JSDoc"
 }
