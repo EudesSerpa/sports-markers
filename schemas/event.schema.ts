@@ -32,6 +32,7 @@ export const createEventSchema: Joi.Schema = Joi.object({
 });
 
 export const updateEventSchema: Joi.Schema = Joi.object({
+  userId: userId.required(),
   name,
   initDate,
   teams,

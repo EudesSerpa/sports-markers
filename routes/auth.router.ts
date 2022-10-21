@@ -1,8 +1,17 @@
 import { Router } from "express";
-import { createEventSchema, queryEventScheme } from "../schemas/event.schema";
+import {
+  createEventSchema,
+  getEventSchema,
+  queryEventScheme,
+  updateEventSchema,
+} from "../schemas/event.schema";
 import { createTeamSchema } from "../schemas/team.schema";
 import { validatorHandler } from "../middlewares/validator.handler";
-import { createEvent, getEvents } from "../controllers/event.controller";
+import {
+  createEvent,
+  getEvents,
+  updateEvent,
+} from "../controllers/event.controller";
 import { createTeam } from "../controllers/team.controller";
 
 const router: Router = Router();
@@ -13,6 +22,12 @@ router.post(
   "/events",
   validatorHandler(createEventSchema, "body"),
   createEvent
+);
+router.patch(
+  "/events/:id",
+  validatorHandler(getEventSchema, "params"),
+  validatorHandler(updateEventSchema, "body"),
+  updateEvent
 );
 
 // Teams

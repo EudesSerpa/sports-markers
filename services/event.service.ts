@@ -66,7 +66,7 @@ export class eventService {
     return sportCreated;
   }
 
-  async update({ id, data }: { id: any; data: {} }): Promise<IEvent> {
+  async update({ id, data }: { id: any; data: any }): Promise<IEvent> {
     if (!Object.keys(data).length) {
       throw new CustomError(
         "You don't send any data to update. If you want clean up the Event, you can delete it",

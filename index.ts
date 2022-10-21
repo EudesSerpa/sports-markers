@@ -1,11 +1,9 @@
 import express, { Express } from "express";
 import cors, { CorsOptions } from "cors";
-import passport from "passport";
 import { errorHandler, logErrors } from "./middlewares/error.handler";
 import { connectDB } from "./database";
 import { router } from "./routes";
 import { conf } from "./config/config";
-import "./utils/auth/index";
 
 connectDB();
 
@@ -25,7 +23,6 @@ const options: CorsOptions = {
 
 app.use(cors(options));
 app.use(express.json());
-app.use(passport.initialize());
 
 router(app);
 

@@ -33,6 +33,7 @@ exports.createEventSchema = joi_1.default.object({
     results: results.required(),
 });
 exports.updateEventSchema = joi_1.default.object({
+    userId: userId.required(),
     name,
     initDate,
     teams,
