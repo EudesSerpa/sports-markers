@@ -2,6 +2,7 @@ import { IEvent } from "../database/interfaces/Event";
 import { Event } from "../database/models/event.model";
 import { CustomError } from "../models/custom-error.model";
 import { validateId } from "../helpers/db/validateId";
+import { ObjectId } from "mongoose";
 
 export class eventService {
   constructor() {}
@@ -49,7 +50,7 @@ export class eventService {
     teams,
     sport,
     results,
-  }: IEvent): Promise<IEvent> {
+  }: IEvent): Promise<IEvent[]> {
     const alreadyExist = await Event.exists({ userId, name, initDate });
 
     if (alreadyExist) {
@@ -61,12 +62,20 @@ export class eventService {
 
     const newEvent: IEvent = { userId, name, initDate, teams, sport, results };
 
-    const sportCreated = await Event.create(newEvent);
+    const eventCreated = await Event.create(newEvent);
 
-    return sportCreated;
+    return await this.find({ userId });
   }
 
-  async update({ id, data }: { id: any; data: any }): Promise<IEvent> {
+  async update({
+    id,
+    userId,
+    data,
+  }: {
+    id: any;
+    userId: any;
+    data: any;
+  }): Promise<IEvent[]> {
     if (!Object.keys(data).length) {
       throw new CustomError(
         "You don't send any data to update. If you want clean up the Event, you can delete it",
@@ -74,7 +83,14 @@ export class eventService {
       );
     }
 
-    validateId(id);
+    const eventToUpdate = await this.findOne(id);
+
+    if (eventToUpdate.userId.toString() !== userId) {
+      throw new CustomError(
+        "This event doesn't belong to the logged in user",
+        403
+      );
+    }
 
     const eventUpdated = await Event.findByIdAndUpdate(id, data, {
       returnDocument: "after",
@@ -84,18 +100,14 @@ export class eventService {
       throw new CustomError("Event doesn't exist", 404);
     }
 
-    return eventUpdated;
+    return await this.find({ userId });
   }
 
-  async delete(id: any): Promise<IEvent | object> {
+  async delete({ id, userId }: { id: any; userId: any }): Promise<IEvent[]> {
     validateId(id);
 
     const eventDeleted = await Event.findByIdAndDelete(id);
 
-    if (!eventDeleted) {
-      return { info: "There's no any event to delete :)" };
-    }
-
-    return eventDeleted;
+    return await this.find({ userId });
   }
 }

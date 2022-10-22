@@ -5,7 +5,7 @@ import { successResponse } from "../helpers/network/response";
 const service = new eventService();
 
 export const getEvents = (req: Request, res: Response, next: NextFunction) => {
-  const { limit, offset } = req.query;
+  const { limit, offset }: any = req.query;
   const { userId } = req.body;
 
   service
@@ -36,8 +36,8 @@ export const createEvent = (
 
   service
     .create({ userId, name, initDate, teams, sport, results })
-    .then((event) => {
-      successResponse(res, event, 201);
+    .then((events) => {
+      successResponse(res, events, 201);
     })
     .catch(next);
 };
@@ -48,12 +48,12 @@ export const updateEvent = (
   next: NextFunction
 ) => {
   const { id } = req.params;
-  const data = req.body;
+  const { userId, name, initDate, teams, sport, results } = req.body;
 
   service
-    .update({ id, data })
-    .then((eventUpdated) => {
-      successResponse(res, eventUpdated);
+    .update({ id, userId, data: { name, initDate, teams, sport, results } })
+    .then((events) => {
+      successResponse(res, events);
     })
     .catch(next);
 };
@@ -64,11 +64,12 @@ export const deleteEvent = (
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { userId } = req.body;
 
   service
-    .delete(id)
-    .then((eventDeleted) => {
-      successResponse(res, eventDeleted);
+    .delete({ id, userId })
+    .then((events) => {
+      successResponse(res, events);
     })
     .catch(next);
 };

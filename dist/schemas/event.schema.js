@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.queryEventScheme = exports.updateEventSchema = exports.createEventSchema = exports.getEventSchema = void 0;
+exports.queryEventScheme = exports.deleteEventSchema = exports.updateEventSchema = exports.createEventSchema = exports.getEventSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 const id = joi_1.default.string();
 const userId = joi_1.default.string();
@@ -39,6 +39,9 @@ exports.updateEventSchema = joi_1.default.object({
     teams,
     sport,
     results,
+});
+exports.deleteEventSchema = joi_1.default.object({
+    userId: userId.required(),
 });
 exports.queryEventScheme = joi_1.default.object({
     limit,

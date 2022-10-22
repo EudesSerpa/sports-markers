@@ -53,33 +53,33 @@ class eventService {
                 throw new custom_error_model_1.CustomError("This user has previously created an event with the same name and date", 409);
             }
             const newEvent = { userId, name, initDate, teams, sport, results };
-            const sportCreated = yield event_model_1.Event.create(newEvent);
-            return sportCreated;
+            const eventCreated = yield event_model_1.Event.create(newEvent);
+            return yield this.find({ userId });
         });
     }
-    update({ id, data }) {
+    update({ id, userId, data, }) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!Object.keys(data).length) {
                 throw new custom_error_model_1.CustomError("You don't send any data to update. If you want clean up the Event, you can delete it", 400);
             }
-            (0, validateId_1.validateId)(id);
+            const eventToUpdate = yield this.findOne(id);
+            if (eventToUpdate.userId.toString() !== userId) {
+                throw new custom_error_model_1.CustomError("This event doesn't belong to the logged in user", 403);
+            }
             const eventUpdated = yield event_model_1.Event.findByIdAndUpdate(id, data, {
                 returnDocument: "after",
             });
             if (!eventUpdated) {
                 throw new custom_error_model_1.CustomError("Event doesn't exist", 404);
             }
-            return eventUpdated;
+            return yield this.find({ userId });
         });
     }
-    delete(id) {
+    delete({ id, userId }) {
         return __awaiter(this, void 0, void 0, function* () {
             (0, validateId_1.validateId)(id);
             const eventDeleted = yield event_model_1.Event.findByIdAndDelete(id);
-            if (!eventDeleted) {
-                return { info: "There's no any event to delete :)" };
-            }
-            return eventDeleted;
+            return yield this.find({ userId });
         });
     }
 }

@@ -40,6 +40,10 @@ export const updateEventSchema: Joi.Schema = Joi.object({
   results,
 });
 
+export const deleteEventSchema: Joi.Schema = Joi.object({
+  userId: userId.required(),
+});
+
 export const queryEventScheme: Joi.Schema = Joi.object({
   limit,
   offset,
