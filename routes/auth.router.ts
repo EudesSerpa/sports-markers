@@ -15,6 +15,8 @@ import {
   updateEvent,
 } from "../controllers/event.controller";
 import { createTeam } from "../controllers/team.controller";
+import { createSportSchema } from "../schemas/sport.schema";
+import { createSport } from "../controllers/sport.controller";
 
 const router: Router = Router();
 
@@ -40,5 +42,12 @@ router.delete(
 
 // Teams
 router.post("/teams", validatorHandler(createTeamSchema, "body"), createTeam);
+
+// Sports
+router.post(
+  "/sports",
+  validatorHandler(createSportSchema, "body"),
+  createSport
+);
 
 export default router;
