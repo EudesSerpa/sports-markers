@@ -9,7 +9,7 @@ connectDB();
 
 const app: Express = express();
 const port = conf.port;
-const whiteList: string[] = ["http://127.0.0.1:5173"];
+const whiteList: string[] = ["http://127.0.0.1:5173", "http://129.213.41.89"];
 
 const options: CorsOptions = {
   origin: (origin, callback) => {
