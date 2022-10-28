@@ -1,4 +1,5 @@
-import { Model, model, Schema, Types } from "mongoose";
+import { Model, model, PaginateDocument, Schema, Types } from "mongoose";
+import paginate from "mongoose-paginate-v2";
 import { IEvent } from "../interfaces/Event";
 import { ISport } from "../interfaces/Sport";
 import { ITeam } from "../interfaces/Team";
@@ -51,4 +52,9 @@ const eventSchema: Schema = new Schema<IEvent, EventModelType>(
   }
 );
 
-export const Event = model<IEvent, EventModelType>("Event", eventSchema);
+eventSchema.plugin(paginate);
+
+export const Event: PaginateDocument<IEvent, any, any> = model<
+  IEvent,
+  EventModelType
+>("Event", eventSchema);

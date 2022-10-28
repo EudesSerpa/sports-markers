@@ -2,7 +2,6 @@ import { IEvent } from "../database/interfaces/Event";
 import { Event } from "../database/models/event.model";
 import { CustomError } from "../models/custom-error.model";
 import { validateId } from "../helpers/db/validateId";
-import { ObjectId } from "mongoose";
 
 export class eventService {
   constructor() {}
@@ -13,22 +12,22 @@ export class eventService {
       sort: {
         createdAt: "desc",
       },
+      lean: true,
     };
 
-    // filtered
+    // filtered by user
     if (userId) {
       filter.userId = userId;
     }
 
-    // Paginated or limited
-    if (limit && offset) {
+    // Paginated
+    if (limit && (offset === 0 || offset)) {
       options.limit = limit;
-      options.skip = offset;
-    } else if (limit) {
-      options.limit = limit;
+      options.offset = offset;
+      return await Event.paginate(filter, options);
     }
 
-    return await Event.find(filter, null, options).lean();
+    return await Event.find(filter, null, options);
   }
 
   async findOne(id: any): Promise<IEvent> {

@@ -22,18 +22,17 @@ class eventService {
                 sort: {
                     createdAt: "desc",
                 },
+                lean: true,
             };
             if (userId) {
                 filter.userId = userId;
             }
-            if (limit && offset) {
+            if (limit && (offset === 0 || offset)) {
                 options.limit = limit;
-                options.skip = offset;
+                options.offset = offset;
+                return yield event_model_1.Event.paginate(filter, options);
             }
-            else if (limit) {
-                options.limit = limit;
-            }
-            return yield event_model_1.Event.find(filter, null, options).lean();
+            return yield event_model_1.Event.find(filter, null, options);
         });
     }
     findOne(id) {
