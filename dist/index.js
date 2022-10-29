@@ -12,7 +12,11 @@ const config_1 = require("./config/config");
 (0, database_1.connectDB)();
 const app = (0, express_1.default)();
 const port = config_1.conf.port;
-const whiteList = ["http://127.0.0.1:5173", "http://129.213.41.89"];
+const whiteList = [
+    "http://127.0.0.1:5173",
+    "http://129.213.41.89",
+    "https://sports-markers.vercel.app",
+];
 const options = {
     origin: (origin, callback) => {
         if (whiteList.includes(origin) || !origin) {
